@@ -368,9 +368,15 @@ uploaded_file = st.file_uploader("Upload your dataset (CSV or Excel)", type=["cs
 if uploaded_file:
     df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith(".csv") else pd.read_excel(uploaded_file)
     master_df = df.copy()
+    # Create a complaint lookup dictionary once
+    if "maid_id" in df.columns and "subcategory_themes" in df.columns:
+        maid_complaints = df.groupby("maid_id")["subcategory_themes"].apply(list).to_dict()
+    else:
+        maid_complaints = {}
     # Create tabs
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Matching Scores", "Optimal Matches","Customer Interface", "Maid Profile Explorer", "Summary Metrics"])
 
+    
     # ---------------- Tab 1: Existing Matching ----------------
     with tab1:
         st.write("### Matching Scores (Key Fields Only)")
@@ -585,6 +591,15 @@ if uploaded_file:
                     st.write("**Nationality:**", match["Nationality Reason"])
                     st.write("**Cuisine:**", match["Cuisine Reason"])
                     st.write("**Bonus:**", match["Bonus Reasons"])
+
+                    with st.expander("🧾 View Complaint History"):
+                        maid_id = match["maid_id"]
+                        if maid_id in maid_complaints:
+                            complaints_list = maid_complaints[maid_id]
+                            for i, complaint in enumerate(complaints_list, start=1):
+                                st.markdown(f"**Complaint {i}:** {complaint}")
+                        else:
+                            st.info("✅ No previous complaints found for this maid.")
 
     # ---------------- Tab 4: Maid Profile Explorer ----------------
     with tab4:
