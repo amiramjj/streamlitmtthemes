@@ -447,7 +447,8 @@ if uploaded_file:
         # maids_df = df[maid_cols].drop_duplicates(subset=["maid_id"]).reset_index(drop=True)
         clients_df = master_df[client_cols].drop_duplicates(subset=["client_name"]).reset_index(drop=True)
         maids_df = master_df[maid_cols].drop_duplicates(subset=["maid_id"]).reset_index(drop=True)
-        
+        print(list(maids_df.columns))   #
+
         st.write(f" Deduplication complete: {len(clients_df)} unique clients, {len(maids_df)} unique maids.")
 
         # -------------------------------
