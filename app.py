@@ -599,7 +599,9 @@ if uploaded_file:
                             for i, complaint in enumerate(complaints_list, start=1):
                                 st.markdown(f"**Complaint {i}:** {complaint}")
                         else:
-                            st.info("✅ No previous complaints found for this maid.")
+                            st.info("!No previous complaints found for this maid!")
+
+    
 
     # ---------------- Tab 4: Maid Profile Explorer ----------------
     with tab4:
